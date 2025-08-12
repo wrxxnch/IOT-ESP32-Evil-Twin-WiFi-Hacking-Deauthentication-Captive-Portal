@@ -66,7 +66,7 @@ void setup() {
   Serial.begin(115200);
   WiFi.mode(WIFI_AP_STA);
   WiFi.softAPConfig(IPAddress(192, 168, 4, 1), IPAddress(192, 168, 4, 1), IPAddress(255, 255, 255, 0));
-  WiFi.softAP("WiPhi_34732", "d347h320");
+  WiFi.softAP("WiPhi_DEDSEC", "123456789");
   dnsServer.start(DNS_PORT, "*", IPAddress(192, 168, 4, 1));
 
   webServer.on("/", handleIndex);
@@ -110,7 +110,7 @@ void handleResult() {
     int n = WiFi.softAPdisconnect (true);
     Serial.println(String(n));
     WiFi.softAPConfig(IPAddress(192, 168, 4, 1) , IPAddress(192, 168, 4, 1) , IPAddress(255, 255, 255, 0));
-    WiFi.softAP("WiPhi_34732", "d347h320");
+    WiFi.softAP("WiPhi_DEDSEC", "123456789");
     dnsServer.start(53, "*", IPAddress(192, 168, 4, 1));
     Serial.println("Good password was entered !");
     Serial.println(_correct);
@@ -162,7 +162,7 @@ void handleIndex() {
       int n = WiFi.softAPdisconnect (true);
       Serial.println(String(n));
       WiFi.softAPConfig(IPAddress(192, 168, 4, 1) , IPAddress(192, 168, 4, 1) , IPAddress(255, 255, 255, 0));
-      WiFi.softAP("WiPhi_34732", "d347h320");
+      WiFi.softAP("WiPhi_DEDSEC", "123456789");
       dnsServer.start(53, "*", IPAddress(192, 168, 4, 1));
     }
     return;
@@ -274,7 +274,7 @@ void handleAdmin() {
       int n = WiFi.softAPdisconnect (true);
       Serial.println(String(n));
       WiFi.softAPConfig(IPAddress(192, 168, 4, 1) , IPAddress(192, 168, 4, 1) , IPAddress(255, 255, 255, 0));
-      WiFi.softAP("WiPhi_34732", "d347h320");
+      WiFi.softAP("WiPhi_DEDSEC", "123456789");
       dnsServer.start(53, "*", IPAddress(192, 168, 4, 1));
     }
     return;
